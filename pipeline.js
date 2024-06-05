@@ -4,21 +4,15 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+// set env variables
 const ctAccountId = process.env.CLEVERTAP_ACCOUNT_ID;
 const ctPasscode = process.env.CLEVERTAP_PASSCODE;
 const region = process.env.CLEVERTAP_REGION;
 
-
-// const cors = require("cors");
-// app.use(cors);
-
-// First generate the o-auth 2.0 token and then you'll get the access token used to make api calls 
-
+// First generate the o-auth 2.0 token for zoho and then you'll get the access token used to make api calls 
 const zohoUsers = 'https://www.zohoapis.in/crm/v6/users?type=AllUsers';
 const ctUserPushURI = 'https://in1.api.clevertap.com/1/upload'
 const authTokenForZohoUsers = process.env.AUTH_TOKEN_ZOHO_USERS_MODULES_SCOPE;
-
-// console.log(ctAccountId, ctPasscode, region, authTokenForZohoUsers);
 
 const fetchZohoUsers = async () => {
 
@@ -64,7 +58,6 @@ app.get("/", (req, res) => {
   const callAPIs = async () => {
     const data = await fetchZohoUsers();
     const {country, state, zuid, email, full_name, id} = data.users[0]
-    // console.log(country, state, zuid, email, full_name, id, "data using asd");
 
     const profile = {
       objectId: id, // Unique identifier for the user
@@ -84,10 +77,6 @@ app.get("/", (req, res) => {
   }
 
   callAPIs();
-
-  // const data = fetchZohoUsers();
-  // const nested = data.users;
-  // console.log(country, state, zuid, email, full_name, id);
   res.send('Pipeline running...');
 });
     
@@ -98,8 +87,3 @@ app.listen(port, () => {
 
 
 
-// to do:
-
-// get the zoho deals access
-
-// try to push some perso data to clevertap
