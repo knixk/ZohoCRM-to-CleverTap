@@ -15,6 +15,7 @@ const region = process.env.CLEVERTAP_REGION;
 // First generate the o-auth 2.0 token and then you'll get the access token used to make api calls 
 
 const zohoUsers = 'https://www.zohoapis.in/crm/v6/users?type=AllUsers';
+const ctUserPushURI = 'https://in1.api.clevertap.com/1/upload'
 const authTokenForZohoUsers = process.env.AUTH_TOKEN_ZOHO_USERS_MODULES_SCOPE;
 
 // console.log(ctAccountId, ctPasscode, region, authTokenForZohoUsers);
@@ -49,7 +50,7 @@ const pushToCleverTap = async (profile) => {
     };
 
     try { 
-        const response = await axios.post(url, data, { headers });
+        const response = await axios.post(ctUserPushURI, data, { headers });
         // console.log(response.data)
         return response.data;
     } catch (error) {
@@ -77,8 +78,8 @@ app.get("/", (req, res) => {
       }
     };  
 
-    const response = pushToCleverTap(profile);
-    // console.log('User profile created/updated successfully:', response);
+    const response = await pushToCleverTap(profile);
+    console.log('User profile created/updated successfully:', response);
 
   }
 
@@ -88,9 +89,6 @@ app.get("/", (req, res) => {
   // const nested = data.users;
   // console.log(country, state, zuid, email, full_name, id);
   res.send('Pipeline running...');
-
-
-
 });
     
 
